@@ -744,14 +744,13 @@
         </div>
     </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Database simulation using localStorage
         const IronTradingDB = {
             init: function() {
                 if (!localStorage.getItem('ironTradingInitialized')) {
-                    // Initialize with sample data
                     const sampleData = {
                         users: [
                             { id: 1, username: 'Pradeep391', password: 'admin123', role: 'admin' },
@@ -838,11 +837,11 @@
                 return true;
             }
         };
-      // Initialize the app
+
+        // Initialize the app
         document.addEventListener('DOMContentLoaded', function() {
             IronTradingDB.init();
             
-            // Login form handling
             document.getElementById('loginForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const username = document.getElementById('username').value;
@@ -852,23 +851,16 @@
                 const user = users.find(u => u.username === username && u.password === password);
                 
                 if (user) {
-                    // Successful login
                     document.getElementById('loginScreen').classList.add('d-none');
                     document.getElementById('appContainer').classList.remove('d-none');
                     document.getElementById('usernameDisplay').textContent = `Welcome, ${user.username}`;
-                    
-                    // Store current user
                     window.currentUser = user;
-                    
-                    // Load dashboard
                     loadSection('dashboard');
                 } else {
-                    // Failed login
                     document.getElementById('loginError').classList.remove('d-none');
                 }
             });
             
-            // Logout handling
             document.getElementById('logoutBtn').addEventListener('click', function() {
                 document.getElementById('appContainer').classList.add('d-none');
                 document.getElementById('loginScreen').classList.remove('d-none');
@@ -877,62 +869,46 @@
                 document.getElementById('password').value = '';
             });
             
-            // Navigation handling
             document.querySelectorAll('.nav-link[data-section]').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const section = this.getAttribute('data-section');
-                    
-                    // Update active state
                     document.querySelectorAll('.nav-link').forEach(navLink => {
                         navLink.classList.remove('active');
                     });
                     this.classList.add('active');
-                    
-                    // Load section
                     loadSection(section);
                 });
             });
 
-            // Invoice generation handlers
             document.getElementById('gstPercentage').addEventListener('input', calculateTaxes);
             document.getElementById('tcsPercentage').addEventListener('input', calculateTaxes);
             document.getElementById('printInvoice').addEventListener('click', printInvoice);
             document.getElementById('downloadInvoice').addEventListener('click', downloadInvoice);
             
-            // Order form handlers
             document.getElementById('orderQuantity').addEventListener('input', calculateOrderTotal);
             document.getElementById('orderPrice').addEventListener('input', calculateOrderTotal);
             document.getElementById('orderGst').addEventListener('input', calculateOrderTotal);
             document.getElementById('orderTcs').addEventListener('input', calculateOrderTotal);
             document.getElementById('saveOrder').addEventListener('click', saveOrder);
             
-            // Item form handler
             document.getElementById('saveItem').addEventListener('click', saveItem);
             
-            // Payment form handler
             document.getElementById('savePayment').addEventListener('click', savePayment);
             document.getElementById('paymentOrder').addEventListener('change', updatePaymentInfo);
             
-            // Password change handler
             document.getElementById('savePassword').addEventListener('click', changePassword);
-            
-            // New password strength meter
             document.getElementById('newPassword').addEventListener('input', updatePasswordStrength);
             
-            // Set current date as default for order date
             document.getElementById('orderDate').valueAsDate = new Date();
-            document.getElementById('paymentDate').valueAsDate = new Date();
             
-            // Global variable to store item ID for editing
             window.currentItemId = null;
-
-            // Sidebar toggle for mobile
+            window.currentItemType = null;
+            
             document.getElementById('sidebarToggleBtn').addEventListener('click', function() {
                 document.getElementById('sidebar').classList.toggle('active');
             });
 
-            // Hide sidebar on link click for mobile
             document.querySelectorAll('.sidebar .nav-link').forEach(link => {
                 link.addEventListener('click', () => {
                     if (window.innerWidth <= 992) {
@@ -941,13 +917,11 @@
                 });
             });
 
-            // Initialize UI state
             if (window.innerWidth <= 992) {
                 document.getElementById('sidebar').classList.add('mobile');
             }
         });
 
-        // Section loading functions
         function loadSection(section) {
             switch(section) {
                 case 'dashboard':
@@ -1102,7 +1076,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="action-buttons">
-                                                        <button class="btn btn-sm btn-info" onclick="viewItem('order', ${order.id})">
+                                                        <button class="btn btn-sm btn-info" onclick="viewItem('orders', ${order.id})">
                                                             <i class="fas fa-eye"></i>
                                                         </button>
                                                         <button class="btn btn-sm btn-warning" onclick="editOrder(${order.id})">
@@ -1185,7 +1159,6 @@
             
             document.getElementById('contentArea').innerHTML = content;
             
-            // Render chart
             const ctx = document.getElementById('orderStatusChart').getContext('2d');
             const statusCounts = {
                 'completed': orders.filter(o => o.status === 'completed').length,
@@ -1370,7 +1343,7 @@
                                                     <button class="btn btn-sm btn-info" onclick="viewItem('materials', ${material.id})">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
-                                                    <button class="btn btn-sm btn-warning" onclick="editItem('materials', ${material.id})">
+                                                    <button class="btn btn-sm btn-warning" onclick="editItem('material', ${material.id})">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                     <button class="btn btn-sm btn-danger" onclick="deleteItem('materials', ${material.id})">
@@ -1435,7 +1408,7 @@
                                                     <button class="btn btn-sm btn-info" onclick="viewItem('partners', ${partner.id})">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
-                                                    <button class="btn btn-sm btn-warning" onclick="editItem('partners', ${partner.id})">
+                                                    <button class="btn btn-sm btn-warning" onclick="editItem('partner', ${partner.id})">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                     <button class="btn btn-sm btn-danger" onclick="deleteItem('partners', ${partner.id})">
@@ -1545,7 +1518,6 @@
                 const order = orders.find(o => o.id === payment.order_id);
                 const buyer = order ? partners.find(p => p.id === order.buyer_id) : null;
                 
-                // Calculate payment progress
                 const totalPaid = payments.filter(p => p.order_id === payment.order_id && p.status === 'completed')
                                          .reduce((sum, p) => sum + p.amount, 0);
                 const paymentProgress = order ? (totalPaid / order.total_amount) * 100 : 0;
@@ -1614,7 +1586,7 @@
                                                 <button class="btn btn-sm btn-info" onclick="viewItem('payments', ${payment.id})">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
-                                                    <button class="btn btn-sm btn-warning" onclick="editItem('payments', ${payment.id})">
+                                                    <button class="btn btn-sm btn-warning" onclick="showAddPaymentModal(${payment.id})">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                     <button class="btn btn-sm btn-danger" onclick="deleteItem('payments', ${payment.id})">
@@ -1674,7 +1646,7 @@
                                                     <button class="btn btn-sm btn-info" onclick="viewItem('employees', ${employee.id})">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
-                                                    <button class="btn btn-sm btn-warning" onclick="editItem('employees', ${employee.id})">
+                                                    <button class="btn btn-sm btn-warning" onclick="editItem('employee', ${employee.id})">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                     <button class="btn btn-sm btn-danger" onclick="deleteItem('employees', ${employee.id})">
@@ -1699,14 +1671,12 @@
             const materials = IronTradingDB.get('materials');
             const partners = IronTradingDB.get('partners');
             
-            // Calculate revenue by month
             const revenueByMonth = {};
             orders.filter(o => o.status === 'completed').forEach(order => {
                 const month = new Date(order.order_date).toLocaleString('default', { month: 'long' });
                 revenueByMonth[month] = (revenueByMonth[month] || 0) + order.total_amount;
             });
             
-            // Calculate material distribution
             const materialDistribution = {};
             materials.forEach(material => {
                 materialDistribution[material.name] = material.quantity;
@@ -1766,7 +1736,6 @@
             
             document.getElementById('contentArea').innerHTML = content;
             
-            // Render revenue chart
             const revenueCtx = document.getElementById('revenueChart').getContext('2d');
             new Chart(revenueCtx, {
                 type: 'bar',
@@ -1795,7 +1764,6 @@
                 }
             });
             
-            // Render material chart
             const materialCtx = document.getElementById('materialChart').getContext('2d');
             new Chart(materialCtx, {
                 type: 'pie',
@@ -1872,7 +1840,6 @@
             document.getElementById('contentArea').innerHTML = content;
         }
         
-        // New password strength meter function
         function updatePasswordStrength() {
             const passwordInput = document.getElementById('newPassword');
             const strengthBar = document.querySelector('.password-strength');
@@ -1897,23 +1864,22 @@
 
             if (score <= 1) {
                 width = 25;
-                color = '#e74c3c'; // red (weak)
+                color = '#e74c3c';
             } else if (score <= 3) {
                 width = 50;
-                color = '#f39c12'; // orange (medium)
+                color = '#f39c12';
             } else if (score <= 4) {
                 width = 75;
-                color = '#2980b9'; // blue (good)
+                color = '#2980b9';
             } else {
                 width = 100;
-                color = '#27ae60'; // green (strong)
+                color = '#27ae60';
             }
 
             strengthBar.style.width = width + '%';
             strengthBar.style.backgroundColor = color;
         }
 
-        // Invoice generation functions
         function generateInvoice(orderId) {
             const order = IronTradingDB.get('orders', orderId);
             if (!order) return;
@@ -1921,7 +1887,6 @@
             const buyer = IronTradingDB.get('partners', order.buyer_id);
             const material = IronTradingDB.get('materials', order.material_id);
             
-            // Set invoice details
             const invoiceNumber = 'INV' + new Date().getTime();
             const invoiceDate = new Date().toLocaleDateString();
             
@@ -1936,7 +1901,6 @@
             document.getElementById('invoiceOrderNumber').textContent = order.order_number;
             document.getElementById('invoiceOrderDate').textContent = new Date(order.order_date).toLocaleDateString();
             
-            // Populate items
             document.getElementById('invoiceItems').innerHTML = `
                 <tr>
                     <td>${material.name} (${material.grade})<br><small>HSN: ${material.hsn_code}</small></td>
@@ -1945,21 +1909,16 @@
                     <td>₹${order.total_amount.toLocaleString()}</td>
                 </tr>
             `;
-          // Set subtotal
             document.getElementById('invoiceSubtotal').textContent = order.total_amount.toFixed(2);
             
-            // Set tax percentages
             document.getElementById('gstPercentage').value = order.gst_percentage || 18;
             document.getElementById('tcsPercentage').value = order.tcs_percentage || 1;
             
-            // Calculate taxes
             calculateTaxes();
             
-            // Show modal
             const invoiceModal = new bootstrap.Modal(document.getElementById('invoiceModal'));
             invoiceModal.show();
             
-            // Store current order for saving
             window.currentInvoiceOrderId = orderId;
         }
 
@@ -1993,7 +1952,6 @@
                 return;
             }
             
-            // For simplicity, generate invoice for the first completed order
             generateInvoice(completedOrders[0].id);
         }
 
@@ -2004,7 +1962,6 @@
             document.getElementById('orderForm').reset();
             document.getElementById('orderDate').valueAsDate = new Date();
             
-            // Populate buyer dropdown
             const buyerSelect = document.getElementById('orderBuyer');
             buyerSelect.innerHTML = '<option value="">Select Buyer</option>';
             const buyers = IronTradingDB.get('partners').filter(p => p.type === 'buyer');
@@ -2012,7 +1969,6 @@
                 buyerSelect.innerHTML += `<option value="${buyer.id}">${buyer.name}</option>`;
             });
             
-            // Populate material dropdown
             const materialSelect = document.getElementById('orderMaterial');
             materialSelect.innerHTML = '<option value="">Select Material</option>';
             const materials = IronTradingDB.get('materials');
@@ -2020,7 +1976,6 @@
                 materialSelect.innerHTML += `<option value="${material.id}" data-price="${material.cost_per_unit}">${material.name} (₹${material.cost_per_unit}/ton)</option>`;
             });
             
-            // Set up material change event to auto-fill price
             materialSelect.addEventListener('change', function() {
                 const selectedOption = this.options[this.selectedIndex];
               if (selectedOption && selectedOption.dataset.price) {
@@ -2029,7 +1984,6 @@
                 }
             });
             
-            // Show modal
             const addOrderModal = new bootstrap.Modal(document.getElementById('addOrderModal'));
             addOrderModal.show();
         }
@@ -2042,7 +1996,6 @@
             const order = IronTradingDB.get('orders', orderId);
             
             if (order) {
-                // Populate form with existing data
                 document.getElementById('orderBuyer').value = order.buyer_id;
                 document.getElementById('orderMaterial').value = order.material_id;
                 document.getElementById('orderQuantity').value = order.quantity;
@@ -2054,7 +2007,6 @@
                 calculateOrderTotal();
             }
             
-            // Show modal
             const addOrderModal = new bootstrap.Modal(document.getElementById('addOrderModal'));
             addOrderModal.show();
         }
@@ -2106,17 +2058,14 @@
             };
             
             if (window.currentItemId) {
-                // Update existing order
                 IronTradingDB.update('orders', window.currentItemId, newOrderData);
                 alert('Order updated successfully!');
             } else {
-                // Create new order
                 newOrderData.order_number = 'ORD' + Date.now();
                 newOrderData.status = 'pending';
                 newOrderData.expected_delivery = new Date(new Date(orderDate).getTime() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
                 IronTradingDB.create('orders', newOrderData);
                 
-                // Update material quantity
                 const material = IronTradingDB.get('materials', parseInt(materialId));
                 if (material) {
                     IronTradingDB.update('materials', material.id, {
@@ -2126,10 +2075,10 @@
                 alert('Order created successfully!');
             }
             
-            // Close modal and refresh orders
-          bootstrap.Modal.getInstance(document.getElementById('addOrderModal')).hide();
+            bootstrap.Modal.getInstance(document.getElementById('addOrderModal')).hide();
             loadSection('orders');
         }
+
         function showAddItemModal(type, id = null) {
             const modalTitle = document.getElementById('addItemModalTitle');
             const saveButton = document.getElementById('saveItem');
@@ -2137,6 +2086,7 @@
             
             itemForm.innerHTML = '';
             window.currentItemId = id;
+            window.currentItemType = type;
 
             if (id) {
                 modalTitle.textContent = `Edit ${type.charAt(0).toUpperCase() + type.slice(1)}`;
@@ -2151,7 +2101,6 @@
                 item = IronTradingDB.get(type + 's', id);
             }
             
-            // Set modal title based on type
             switch(type) {
                 case 'material':
                     itemForm.innerHTML = `
@@ -2207,7 +2156,7 @@
                         </div>
                         
                         <div class="row">
-                        <div class="col-md-6">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="materialPurchaseDate" class="form-label">Purchase Date</label>
                                     <input type="date" class="form-control" id="materialPurchaseDate" required value="${item?.purchase_date || ''}">
@@ -2215,8 +2164,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-<label for="materialHsn" class="form-label">HSN Code</label>
-<input type="text" class="form-control" id="materialHsn" value="${item?.hsn_code || ''}">
+                                    <label for="materialHsn" class="form-label">HSN Code</label>
+                                    <input type="text" class="form-control" id="materialHsn" value="${item?.hsn_code || ''}">
                                 </div>
                             </div>
                         </div>
@@ -2227,7 +2176,6 @@
                         </div>
                     `;
                     
-                    // Populate supplier dropdown
                     const suppliers = IronTradingDB.get('partners').filter(p => p.type === 'supplier');
                     const supplierSelect = document.getElementById('materialSupplier');
                     suppliers.forEach(supplier => {
@@ -2303,595 +2251,490 @@
                 case 'transport':
                     itemForm.innerHTML = `
                         <div class="row">
-<div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="transportOrder" class="form-label">Order</label>
-                                            <select class="form-select" id="transportOrder" required>
-                                                <option value="">Select Order</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="transportTransporter" class="form-label">Transporter Name</label>
-                                            <input type="text" class="form-control" id="transportTransporter" required value="${item?.transporter_name || ''}">
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="transportVehicle" class="form-label">Vehicle Number</label>
-                                            <input type="text" class="form-control" id="transportVehicle" required value="${item?.vehicle_number || ''}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="transportDriver" class="form-label">Driver Name</label>
-                                            <input type="text" class="form-control" id="transportDriver" required value="${item?.driver_name || ''}">
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="transportDriverContact" class="form-label">Driver Contact</label>
-                                            <input type="tel" class="form-control" id="transportDriverContact" required value="${item?.driver_contact || ''}">
-                                        </div>
-                                    </div>
-<div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="transportCost" class="form-label">Shipping Cost (₹)</label>
-                                            <input type="number" class="form-control" id="transportCost" required min="0" step="0.01" value="${item?.shipping_cost || ''}">
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="transportDispatch" class="form-label">Dispatch Date</label>
-                                            <input type="date" class="form-control" id="transportDispatch" required value="${item?.dispatch_date || ''}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="transportExpected" class="form-label">Expected Arrival</label>
-                                            <input type="date" class="form-control" id="transportExpected" required value="${item?.expected_arrival || ''}">
-                                        </div>
-                                    </div>
-                                </div>
-                                
+                            <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="transportStatus" class="form-label">Status</label>
-                                    <select class="form-select" id="transportStatus" required>
-                                        <option value="scheduled" ${item?.status === 'scheduled' ? 'selected' : ''}>Scheduled</option>
-                                        <option value="in_transit" ${item?.status === 'in_transit' ? 'selected' : ''}>In Transit</option>
-                                        <option value="delivered" ${item?.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                                    <label for="transportOrder" class="form-label">Order</label>
+                                    <select class="form-select" id="transportOrder" required>
+                                        <option value="">Select Order</option>
                                     </select>
                                 </div>
-                                
+                            </div>
+                            <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="transportNotes" class="form-label">Notes</label>
-                                    <textarea class="form-control" id="transportNotes" rows="2">${item?.notes || ''}</textarea>
+                                    <label for="transportTransporter" class="form-label">Transporter Name</label>
+                                    <input type="text" class="form-control" id="transportTransporter" required value="${item?.transporter_name || ''}">
                                 </div>
-                            `;
-                            
-                            // Populate order dropdown
-                            const orders = IronTradingDB.get('orders');
-                            const orderSelect = document.getElementById('transportOrder');
-                            orders.forEach(order => {
-                                orderSelect.innerHTML += `<option value="${order.id}" ${item?.order_id === order.id ? 'selected' : ''}>${order.order_number}</option>`;
-                            });
-                            
-                            if (!id) {
-                                document.getElementById('transportDispatch').valueAsDate = new Date();
-                                const expectedDate = new Date();
-                                expectedDate.setDate(expectedDate.getDate() + 7);
-                                document.getElementById('transportExpected').valueAsDate = expectedDate;
-                            }
-                            break;
-                            
-                        case 'employee':
-                            itemForm.innerHTML = `
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="employeeName" class="form-label">Name</label>
-                                            <input type="text" class="form-control" id="employeeName" required value="${item?.name || ''}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-<label for="employeeEmail" class="form-label">Email</label>
-                                            <input type="email" class="form-control" id="employeeEmail" required value="${item?.email || ''}">
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="employeePhone" class="form-label">Phone</label>
-                                            <input type="tel" class="form-control" id="employeePhone" required value="${item?.phone || ''}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="employeePosition" class="form-label">Position</label>
-                                            <input type="text" class="form-control" id="employeePosition" required value="${item?.position || ''}">
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="employeeSalary" class="form-label">Salary (₹)</label>
-                                            <input type="number" class="form-control" id="employeeSalary" required min="0" step="0.01" value="${item?.salary || ''}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="employeeHireDate" class="form-label">Hire Date</label>
-                                            <input type="date" class="form-control" id="employeeHireDate" required value="${item?.hire_date || ''}">
-                                        </div>
-                                    </div>
-                                </div>
-                                
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="employeeAddress" class="form-label">Address</label>
-                                    <textarea class="form-control" id="employeeAddress" rows="2" required>${item?.address || ''}</textarea>
+                                    <label for="transportVehicle" class="form-label">Vehicle Number</label>
+                                    <input type="text" class="form-control" id="transportVehicle" required value="${item?.vehicle_number || ''}">
                                 </div>
-                            `;
-                            
-                            if (!id) document.getElementById('employeeHireDate').valueAsDate = new Date();
-                            break;
-                            
-                        case 'payments':
-                            itemForm.innerHTML = `
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="paymentOrder" class="form-label">Order</label>
-                                            <select class="form-select" id="paymentOrder" required>
-                                                <option value="">Select Order</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="paymentAmount" class="form-label">Amount (₹)</label>
-                                            <input type="number" class="form-control" id="paymentAmount" required min="1" step="0.01" value="${item?.amount || ''}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="paymentDate" class="form-label">Payment Date</label>
-                                            <input type="date" class="form-control" id="paymentDate" required value="${item?.payment_date || ''}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="paymentMethod" class="form-label">Payment Method</label>
-                                            <select class="form-select" id="paymentMethod" required>
-                                                <option value="">Select Method</option>
-                                                <option value="cash" ${item?.payment_method === 'cash' ? 'selected' : ''}>Cash</option>
-                                                <option value="bank_transfer" ${item?.payment_method === 'bank_transfer' ? 'selected' : ''}>Bank Transfer</option>
-                                                <option value="check" ${item?.payment_method === 'check' ? 'selected' : ''}>Check</option>
-                                                <option value="upi" ${item?.payment_method === 'upi' ? 'selected' : ''}>UPI</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="paymentReference" class="form-label">Reference Number</label>
-                                    <input type="text" class="form-control" id="paymentReference" value="${item?.reference_number || ''}">
+                                    <label for="transportDriver" class="form-label">Driver Name</label>
+                                    <input type="text" class="form-control" id="transportDriver" required value="${item?.driver_name || ''}">
                                 </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="paymentNotes" class="form-label">Notes</label>
-                                    <textarea class="form-control" id="paymentNotes" rows="2">${item?.notes || ''}</textarea>
+                                    <label for="transportDriverContact" class="form-label">Driver Contact</label>
+                                    <input type="tel" class="form-control" id="transportDriverContact" required value="${item?.driver_contact || ''}">
                                 </div>
-                            `;
-                            // Populate order dropdown
-                            const paymentsOrders = IronTradingDB.get('orders');
-                            const paymentOrderSelect = document.getElementById('paymentOrder');
-                            paymentsOrders.forEach(order => {
-                                paymentOrderSelect.innerHTML += `<option value="${order.id}" ${item?.order_id === order.id ? 'selected' : ''}>${order.order_number}</option>`;
-                            });
-                            
-                            if (!id) document.getElementById('paymentDate').valueAsDate = new Date();
-                            break;
-                    }
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="transportCost" class="form-label">Shipping Cost (₹)</label>
+                                    <input type="number" class="form-control" id="transportCost" required min="0" step="0.01" value="${item?.shipping_cost || ''}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="transportDispatch" class="form-label">Dispatch Date</label>
+                                    <input type="date" class="form-control" id="transportDispatch" required value="${item?.dispatch_date || ''}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="transportExpected" class="form-label">Expected Arrival</label>
+                                    <input type="date" class="form-control" id="transportExpected" required value="${item?.expected_arrival || ''}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="transportStatus" class="form-label">Status</label>
+                            <select class="form-select" id="transportStatus" required>
+                                <option value="scheduled" ${item?.status === 'scheduled' ? 'selected' : ''}>Scheduled</option>
+                                <option value="in_transit" ${item?.status === 'in_transit' ? 'selected' : ''}>In Transit</option>
+                                <option value="delivered" ${item?.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="transportNotes" class="form-label">Notes</label>
+                            <textarea class="form-control" id="transportNotes" rows="2">${item?.notes || ''}</textarea>
+                        </div>
+                    `;
                     
-                    window.currentItemType = type;
-                    const addItemModal = new bootstrap.Modal(document.getElementById('addItemModal'));
-                    addItemModal.show();
-                }
-
-                function saveItem() {
-                    const type = window.currentItemType;
-                    let newItem = {};
-                    
-                    switch(type) {
-                        case 'material':
-                            const materialName = document.getElementById('materialName').value;
-                            const materialGrade = document.getElementById('materialGrade').value;
-                            const materialQuantity = parseFloat(document.getElementById('materialQuantity').value);
-                            const materialUnit = document.getElementById('materialUnit').value;
-                            const materialCost = parseFloat(document.getElementById('materialCost').value);
-                            const materialSupplier = document.getElementById('materialSupplier').value;
-                            const materialPurchaseDate = document.getElementById('materialPurchaseDate').value;
-                            const materialHsn = document.getElementById('materialHsn').value;
-                            const materialDescription = document.getElementById('materialDescription').value;
-                            
-                            if (!materialName || !materialGrade || !materialQuantity || !materialUnit || !materialCost || !materialSupplier || !materialPurchaseDate) {
-                                alert('Please fill in all required fields');
-                                return;
-                            }
-                            
-                            newItem = {
-                                name: materialName,
-                                description: materialDescription,
-                                grade: materialGrade,
-                                quantity: materialQuantity,
-                                unit: materialUnit,
-                                cost_per_unit: materialCost,
-                                supplier_id: parseInt(materialSupplier),
-                                purchase_date: materialPurchaseDate,
-                                hsn_code: materialHsn
-                            };
-                            break;
-                            
-                        case 'partner':
-                            const partnerName = document.getElementById('partnerName').value;
-                            const partnerType = document.getElementById('partnerType').value;
-                            const partnerContact = document.getElementById('partnerContact').value;
-                            const partnerEmail = document.getElementById('partnerEmail').value;
-                            const partnerPhone = document.getElementById('partnerPhone').value;
-                            const partnerGst = document.getElementById('partnerGst').value;
-                            const partnerAddress = document.getElementById('partnerAddress').value;
-                            const partnerBank = document.getElementById('partnerBank').value;
-                            
-                            if (!partnerName || !partnerType || !partnerContact || !partnerEmail || !partnerPhone || !partnerAddress) {
-                                alert('Please fill in all required fields');
-                                return;
-                            }
-                            
-                            newItem = {
-                                name: partnerName,
-                                type: partnerType,
-                                contact_person: partnerContact,
-                                email: partnerEmail,
-                                phone: partnerPhone,
-                                address: partnerAddress,
-                                bank_details: partnerBank,
-                                gstin: partnerGst
-                            };
-                            break;
-                            
-                        case 'transport':
-                            const transportOrder = document.getElementById('transportOrder').value;
-                            const transportTransporter = document.getElementById('transportTransporter').value;
-                            const transportVehicle = document.getElementById('transportVehicle').value;
-                            const transportDriver = document.getElementById('transportDriver').value;
-                            const transportDriverContact = document.getElementById('transportDriverContact').value;
-                            const transportCost = parseFloat(document.getElementById('transportCost').value);
-                            const transportDispatch = document.getElementById('transportDispatch').value;
-                            const transportExpected = document.getElementById('transportExpected').value;
-                            const transportStatus = document.getElementById('transportStatus').value;
-                            const transportNotes = document.getElementById('transportNotes').value;
-                            
-                            if (!transportOrder || !transportTransporter || !transportVehicle || !transportDriver || !transportDriverContact || !transportCost || !transportDispatch || !transportExpected || !transportStatus) {
-                                alert('Please fill in all required fields');
-                                return;
-                            }
-                            
-                            newItem = {
-                                order_id: parseInt(transportOrder),
-                                transporter_name: transportTransporter,
-                                vehicle_number: transportVehicle,
-                                driver_name: transportDriver,
-                                driver_contact: transportDriverContact,
-                                shipping_cost: transportCost,
-                                dispatch_date: transportDispatch,
-                                expected_arrival: transportExpected,
-                                status: transportStatus,
-                                notes: transportNotes
-                            };
-                            break;
-                            
-                        case 'employee':
-                            const employeeName = document.getElementById('employeeName').value;
-                            const employeeEmail = document.getElementById('employeeEmail').value;
-                            const employeePhone = document.getElementById('employeePhone').value;
-                            const employeePosition = document.getElementById('employeePosition').value;
-                            const employeeSalary = parseFloat(document.getElementById('employeeSalary').value);
-                            const employeeHireDate = document.getElementById('employeeHireDate').value;
-                            const employeeAddress = document.getElementById('employeeAddress').value;
-                            
-                            if (!employeeName || !employeeEmail || !employeePhone || !employeePosition || !employeeSalary || !employeeHireDate || !employeeAddress) {
-                                alert('Please fill in all required fields');
-                                return;
-                            }
-                            
-                            newItem = {
-                                name: employeeName,
-                                email: employeeEmail,
-                                phone: employeePhone,
-                                position: employeePosition,
-                                salary: employeeSalary,
-                                hire_date: employeeHireDate,
-                                address: employeeAddress
-                            };
-                            break;
-                            
-                        case 'payments':
-                            const paymentOrder = document.getElementById('paymentOrder').value;
-                            const paymentAmount = parseFloat(document.getElementById('paymentAmount').value);
-                            const paymentDate = document.getElementById('paymentDate').value;
-                            const paymentMethod = document.getElementById('paymentMethod').value;
-                            const paymentReference = document.getElementById('paymentReference').value;
-                            const paymentNotes = document.getElementById('paymentNotes').value;
-                            
-                            if (!paymentOrder || !paymentAmount || !paymentDate || !paymentMethod) {
-                                alert('Please fill in all required fields');
-                                return;
-                            }
-                            
-                            newItem = {
-                                order_id: parseInt(paymentOrder),
-                                amount: paymentAmount,
-                                payment_date: paymentDate,
-                                payment_method: paymentMethod,
-                                reference_number: paymentReference,
-                                status: 'completed', // Simplified for this demo
-                                notes: paymentNotes
-                            };
-                            break;
-                    }
-                    
-                    if (window.currentItemId) {
-                        IronTradingDB.update(type + 's', window.currentItemId, newItem);
-                        alert(`${type.charAt(0).toUpperCase() + type.slice(1)} updated successfully!`);
-                    } else {
-                        IronTradingDB.create(type + 's', newItem);
-                        alert(`${type.charAt(0).toUpperCase() + type.slice(1)} added successfully!`);
-                    }
-                    
-                    // Close modal and refresh section
-                    bootstrap.Modal.getInstance(document.getElementById('addItemModal')).hide();
-                    loadSection(type + 's');
-                }
-
-                function showAddPaymentModal(paymentId = null) {
-                    window.currentItemId = paymentId;
-                    document.getElementById('paymentModalTitle').textContent = paymentId ? 'Edit Payment' : 'Add New Payment';
-                    document.getElementById('savePayment').textContent = paymentId ? 'Update Payment' : 'Save Payment';
-
-                    document.getElementById('paymentForm').reset();
-                    document.getElementById('paymentDate').valueAsDate = new Date();
-                    document.getElementById('paymentOrderTotal').textContent = '0.00';
-                    document.getElementById('paymentPreviouslyPaid').textContent = '0.00';
-                    document.getElementById('paymentRemainingBalance').textContent = '0.00';
-                    
-                    // Populate order dropdown
-                    const orderSelect = document.getElementById('paymentOrder');
-                    orderSelect.innerHTML = '<option value="">Select Order</option>';
                     const orders = IronTradingDB.get('orders');
+                    const orderSelect = document.getElementById('transportOrder');
                     orders.forEach(order => {
-                        orderSelect.innerHTML += `<option value="${order.id}">${order.order_number}</option>`;
+                        orderSelect.innerHTML += `<option value="${order.id}" ${item?.order_id === order.id ? 'selected' : ''}>${order.order_number}</option>`;
                     });
                     
-                    if (paymentId) {
-                        const payment = IronTradingDB.get('payments', paymentId);
-                        if (payment) {
-                            document.getElementById('paymentOrder').value = payment.order_id;
-                            updatePaymentInfo();
-                            document.getElementById('paymentAmount').value = payment.amount;
-                            document.getElementById('paymentDate').value = payment.payment_date;
-                            document.getElementById('paymentMethod').value = payment.payment_method;
-                            document.getElementById('paymentReference').value = payment.reference_number;
-                            document.getElementById('paymentNotes').value = payment.notes;
-                        }
+                    if (!id) {
+                        document.getElementById('transportDispatch').valueAsDate = new Date();
+                        const expectedDate = new Date();
+                        expectedDate.setDate(expectedDate.getDate() + 7);
+                        document.getElementById('transportExpected').valueAsDate = expectedDate;
                     }
+                    break;
+                    
+                case 'employee':
+                    itemForm.innerHTML = `
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="employeeName" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="employeeName" required value="${item?.name || ''}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="employeeEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="employeeEmail" required value="${item?.email || ''}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="employeePhone" class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" id="employeePhone" required value="${item?.phone || ''}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="employeePosition" class="form-label">Position</label>
+                                    <input type="text" class="form-control" id="employeePosition" required value="${item?.position || ''}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="employeeSalary" class="form-label">Salary (₹)</label>
+                                    <input type="number" class="form-control" id="employeeSalary" required min="0" step="0.01" value="${item?.salary || ''}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="employeeHireDate" class="form-label">Hire Date</label>
+                                    <input type="date" class="form-control" id="employeeHireDate" required value="${item?.hire_date || ''}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="employeeAddress" class="form-label">Address</label>
+                            <textarea class="form-control" id="employeeAddress" rows="2" required>${item?.address || ''}</textarea>
+                        </div>
+                    `;
+                    
+                    if (!id) document.getElementById('employeeHireDate').valueAsDate = new Date();
+                    break;
+            }
+            
+            const addItemModal = new bootstrap.Modal(document.getElementById('addItemModal'));
+            addItemModal.show();
+        }
 
-                    // Show modal
-                    const addPaymentModal = new bootstrap.Modal(document.getElementById('addPaymentModal'));
-                    addPaymentModal.show();
-                }
-
-                function updatePaymentInfo() {
-                    const orderId = document.getElementById('paymentOrder').value;
-                    if (!orderId) {
-                        document.getElementById('paymentOrderTotal').textContent = '0.00';
-                        document.getElementById('paymentPreviouslyPaid').textContent = '0.00';
-                        document.getElementById('paymentRemainingBalance').textContent = '0.00';
-                        document.getElementById('paymentAmount').max = 0;
-                        return;
-                    }
+        function saveItem() {
+            const type = window.currentItemType;
+            let newItem = {};
+            
+            switch(type) {
+                case 'material':
+                    const materialName = document.getElementById('materialName').value;
+                    const materialGrade = document.getElementById('materialGrade').value;
+                    const materialQuantity = parseFloat(document.getElementById('materialQuantity').value);
+                    const materialUnit = document.getElementById('materialUnit').value;
+                    const materialCost = parseFloat(document.getElementById('materialCost').value);
+                    const materialSupplier = document.getElementById('materialSupplier').value;
+                    const materialPurchaseDate = document.getElementById('materialPurchaseDate').value;
+                    const materialHsn = document.getElementById('materialHsn').value;
+                    const materialDescription = document.getElementById('materialDescription').value;
                     
-                    const order = IronTradingDB.get('orders', parseInt(orderId));
-                    const payments = IronTradingDB.get('payments');
-                    
-                    const totalPaid = payments.filter(p => p.order_id === parseInt(orderId) && p.status === 'completed' && p.id !== window.currentItemId)
-                                             .reduce((sum, p) => sum + p.amount, 0);
-                    
-                    const remainingBalance = order.total_amount - totalPaid;
-
-                    if (amount > remainingBalance) {
-                        alert(`Payment amount cannot exceed remaining balance of ₹${remainingBalance.toFixed(2)}`);
-                        return;
-                    }
-                    
-                    const newPaymentData = {
-                        order_id: parseInt(orderId),
-                        amount: amount,
-                        payment_date: paymentDate,
-                        payment_method: paymentMethod,
-                        reference_number: paymentReference,
-                        status: amount === remainingBalance ? 'completed' : 'pending',
-                        notes: paymentNotes
-                    };
-                    
-                    if (window.currentItemId) {
-                        IronTradingDB.update('payments', window.currentItemId, newPaymentData);
-                        alert('Payment updated successfully!');
-                    } else {
-                        IronTradingDB.create('payments', newPaymentData);
-                        alert('Payment added successfully!');
-                    }
-                    
-                    bootstrap.Modal.getInstance(document.getElementById('addPaymentModal')).hide();
-                    loadSection('payments');
-                }
-
-                function savePayment() {
-                    const orderId = document.getElementById('paymentOrder').value;
-                    const amount = parseFloat(document.getElementById('paymentAmount').value);
-                    const paymentDate = document.getElementById('paymentDate').value;
-                    const paymentMethod = document.getElementById('paymentMethod').value;
-                    const paymentReference = document.getElementById('paymentReference').value;
-                    const paymentNotes = document.getElementById('paymentNotes').value;
-                    
-                    if (!orderId || !amount || !paymentDate || !paymentMethod) {
+                    if (!materialName || !materialGrade || !materialQuantity || !materialUnit || !materialCost || !materialSupplier || !materialPurchaseDate) {
                         alert('Please fill in all required fields');
                         return;
                     }
                     
-                    const order = IronTradingDB.get('orders', parseInt(orderId));
-                    const payments = IronTradingDB.get('payments');
-                    
-                    const totalPaidForOrder = payments.filter(p => p.order_id === parseInt(orderId) && p.status === 'completed' && p.id !== window.currentItemId)
-                                             .reduce((sum, p) => sum + p.amount, 0);
-                    
-                    const remainingBalance = order.total_amount - totalPaidForOrder;
-
-                    if (amount > remainingBalance) {
-                        alert(`Payment amount cannot exceed remaining balance of ₹${remainingBalance.toFixed(2)}`);
-                        return;
-                    }
-                    
-                    const newPaymentData = {
-                        order_id: parseInt(orderId),
-                        amount: amount,
-                        payment_date: paymentDate,
-                        payment_method: paymentMethod,
-                        reference_number: paymentReference,
-                        status: 'completed', // Simplified for this demo
-                        notes: paymentNotes
+                    newItem = {
+                        name: materialName,
+                        description: materialDescription,
+                        grade: materialGrade,
+                        quantity: materialQuantity,
+                        unit: materialUnit,
+                        cost_per_unit: materialCost,
+                        supplier_id: parseInt(materialSupplier),
+                        purchase_date: materialPurchaseDate,
+                        hsn_code: materialHsn
                     };
+                    break;
                     
-                    if (window.currentItemId) {
-                        IronTradingDB.update('payments', window.currentItemId, newPaymentData);
-                        alert('Payment updated successfully!');
-                    } else {
-                        IronTradingDB.create('payments', newPaymentData);
-                        alert('Payment added successfully!');
+                case 'partner':
+                    const partnerName = document.getElementById('partnerName').value;
+                    const partnerType = document.getElementById('partnerType').value;
+                    const partnerContact = document.getElementById('partnerContact').value;
+                    const partnerEmail = document.getElementById('partnerEmail').value;
+                    const partnerPhone = document.getElementById('partnerPhone').value;
+                    const partnerGst = document.getElementById('partnerGst').value;
+                    const partnerAddress = document.getElementById('partnerAddress').value;
+                    const partnerBank = document.getElementById('partnerBank').value;
+                    
+                    if (!partnerName || !partnerType || !partnerContact || !partnerEmail || !partnerPhone || !partnerAddress) {
+                        alert('Please fill in all required fields');
+                        return;
                     }
                     
-                    if (newPaymentData.status === 'completed') {
-                        IronTradingDB.update('orders', parseInt(orderId), { status: 'completed' });
+                    newItem = {
+                        name: partnerName,
+                        type: partnerType,
+                        contact_person: partnerContact,
+                        email: partnerEmail,
+                        phone: partnerPhone,
+                        address: partnerAddress,
+                        bank_details: partnerBank,
+                        gstin: partnerGst
+                    };
+                    break;
+                    
+                case 'transport':
+                    const transportOrder = document.getElementById('transportOrder').value;
+                    const transportTransporter = document.getElementById('transportTransporter').value;
+                    const transportVehicle = document.getElementById('transportVehicle').value;
+                    const transportDriver = document.getElementById('transportDriver').value;
+                    const transportDriverContact = document.getElementById('transportDriverContact').value;
+                    const transportCost = parseFloat(document.getElementById('transportCost').value);
+                    const transportDispatch = document.getElementById('transportDispatch').value;
+                    const transportExpected = document.getElementById('transportExpected').value;
+                    const transportStatus = document.getElementById('transportStatus').value;
+                    const transportNotes = document.getElementById('transportNotes').value;
+                    
+                    if (!transportOrder || !transportTransporter || !transportVehicle || !transportDriver || !transportDriverContact || !transportCost || !transportDispatch || !transportExpected || !transportStatus) {
+                        alert('Please fill in all required fields');
+                        return;
                     }
                     
-                    bootstrap.Modal.getInstance(document.getElementById('addPaymentModal')).hide();
-                    loadSection('payments');
-                }
+                    newItem = {
+                        order_id: parseInt(transportOrder),
+                        transporter_name: transportTransporter,
+                        vehicle_number: transportVehicle,
+                        driver_name: transportDriver,
+                        driver_contact: transportDriverContact,
+                        shipping_cost: transportCost,
+                        dispatch_date: transportDispatch,
+                        expected_arrival: transportExpected,
+                        status: transportStatus,
+                        notes: transportNotes
+                    };
+                    break;
+                    
+                case 'employee':
+                    const employeeName = document.getElementById('employeeName').value;
+                    const employeeEmail = document.getElementById('employeeEmail').value;
+                    const employeePhone = document.getElementById('employeePhone').value;
+                    const employeePosition = document.getElementById('employeePosition').value;
+                    const employeeSalary = parseFloat(document.getElementById('employeeSalary').value);
+                    const employeeHireDate = document.getElementById('employeeHireDate').value;
+                    const employeeAddress = document.getElementById('employeeAddress').value;
+                    
+                    if (!employeeName || !employeeEmail || !employeePhone || !employeePosition || !employeeSalary || !employeeHireDate || !employeeAddress) {
+                        alert('Please fill in all required fields');
+                        return;
+                    }
+                    
+                    newItem = {
+                        name: employeeName,
+                        email: employeeEmail,
+                        phone: employeePhone,
+                        position: employeePosition,
+                        salary: employeeSalary,
+                        hire_date: employeeHireDate,
+                        address: employeeAddress
+                    };
+                    break;
+            }
+            
+            if (window.currentItemId) {
+                IronTradingDB.update(type + 's', window.currentItemId, newItem);
+                alert(`${type.charAt(0).toUpperCase() + type.slice(1)} updated successfully!`);
+            } else {
+                IronTradingDB.create(type + 's', newItem);
+                alert(`${type.charAt(0).toUpperCase() + type.slice(1)} added successfully!`);
+            }
+            
+            bootstrap.Modal.getInstance(document.getElementById('addItemModal')).hide();
+            loadSection(type + 's');
+        }
 
-                function changePassword() {
-                    const currentPassword = document.getElementById('currentPassword').value;
-                    const newPassword = document.getElementById('newPassword').value;
-                    const confirmPassword = document.getElementById('confirmPassword').value;
-                    
-                    if (!currentPassword || !newPassword || !confirmPassword) {
-                        alert('Please fill in all fields');
-                        return;
-                    }
-                    
-                    if (newPassword !== confirmPassword) {
-                        alert('New passwords do not match');
-                        return;
-                    }
-                    
-                    if (newPassword.length < 8) {
-                        alert('New password must be at least 8 characters long');
-                        return;
-                    }
-                    
-                    // Verify current password
-                    if (currentPassword !== window.currentUser.password) {
-                        alert('Current password is incorrect');
-                        return;
-                    }
-                    
-                    // Update password
-                    const users = IronTradingDB.get('users');
-                    const userIndex = users.findIndex(u => u.id === window.currentUser.id);
-                    
-                    if (userIndex !== -1) {
-                        users[userIndex].password = newPassword;
-                        localStorage.setItem('users', JSON.stringify(users));
+        function showAddPaymentModal(paymentId = null) {
+            window.currentItemId = paymentId;
+            document.getElementById('paymentModalTitle').textContent = paymentId ? 'Edit Payment' : 'Add New Payment';
+            document.getElementById('savePayment').textContent = paymentId ? 'Update Payment' : 'Save Payment';
+
+            document.getElementById('paymentForm').reset();
+            document.getElementById('paymentDate').valueAsDate = new Date();
+            document.getElementById('paymentOrderTotal').textContent = '0.00';
+            document.getElementById('paymentPreviouslyPaid').textContent = '0.00';
+            document.getElementById('paymentRemainingBalance').textContent = '0.00';
+            
+            const orderSelect = document.getElementById('paymentOrder');
+            orderSelect.innerHTML = '<option value="">Select Order</option>';
+            const orders = IronTradingDB.get('orders');
+            orders.forEach(order => {
+                orderSelect.innerHTML += `<option value="${order.id}">${order.order_number}</option>`;
+            });
+            
+            if (paymentId) {
+                const payment = IronTradingDB.get('payments', paymentId);
+                if (payment) {
+                    document.getElementById('paymentOrder').value = payment.order_id;
+                    updatePaymentInfo();
+                    document.getElementById('paymentAmount').value = payment.amount;
+                    document.getElementById('paymentDate').value = payment.payment_date;
+                    document.getElementById('paymentMethod').value = payment.payment_method;
+                    document.getElementById('paymentReference').value = payment.reference_number;
+                    document.getElementById('paymentNotes').value = payment.notes;
+                }
+            }
+
+            const addPaymentModal = new bootstrap.Modal(document.getElementById('addPaymentModal'));
+            addPaymentModal.show();
+        }
+
+        function updatePaymentInfo() {
+            const orderId = document.getElementById('paymentOrder').value;
+            if (!orderId) {
+                document.getElementById('paymentOrderTotal').textContent = '0.00';
+                document.getElementById('paymentPreviouslyPaid').textContent = '0.00';
+                document.getElementById('paymentRemainingBalance').textContent = '0.00';
+                return;
+            }
+            
+            const order = IronTradingDB.get('orders', parseInt(orderId));
+            const payments = IronTradingDB.get('payments');
+            
+            const totalPaid = payments.filter(p => p.order_id === parseInt(orderId) && p.status === 'completed' && p.id !== window.currentItemId)
+                                     .reduce((sum, p) => sum + p.amount, 0);
+            
+            const remainingBalance = order.total_amount - totalPaid;
+
+            document.getElementById('paymentOrderTotal').textContent = order.total_amount.toFixed(2);
+            document.getElementById('paymentPreviouslyPaid').textContent = totalPaid.toFixed(2);
+            document.getElementById('paymentRemainingBalance').textContent = remainingBalance.toFixed(2);
+        }
+
+        function savePayment() {
+            const orderId = document.getElementById('paymentOrder').value;
+            const amount = parseFloat(document.getElementById('paymentAmount').value);
+            const paymentDate = document.getElementById('paymentDate').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            const paymentReference = document.getElementById('paymentReference').value;
+            const paymentNotes = document.getElementById('paymentNotes').value;
+            
+            if (!orderId || !amount || !paymentDate || !paymentMethod) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const order = IronTradingDB.get('orders', parseInt(orderId));
+            const payments = IronTradingDB.get('payments');
+            
+            const totalPaidForOrder = payments.filter(p => p.order_id === parseInt(orderId) && p.status === 'completed' && p.id !== window.currentItemId)
+                                     .reduce((sum, p) => sum + p.amount, 0);
+            
+            const remainingBalance = order.total_amount - totalPaidForOrder;
+
+            if (amount > remainingBalance) {
+                alert(`Payment amount cannot exceed remaining balance of ₹${remainingBalance.toFixed(2)}`);
+                return;
+            }
+            
+            const newPaymentData = {
+                order_id: parseInt(orderId),
+                amount: amount,
+                payment_date: paymentDate,
+                payment_method: paymentMethod,
+                reference_number: paymentReference,
+                status: 'completed',
+                notes: paymentNotes
+            };
+            
+            if (window.currentItemId) {
+                IronTradingDB.update('payments', window.currentItemId, newPaymentData);
+                alert('Payment updated successfully!');
+            } else {
+                IronTradingDB.create('payments', newPaymentData);
+                alert('Payment added successfully!');
+            }
+            
+            if (newPaymentData.status === 'completed') {
+                IronTradingDB.update('orders', parseInt(orderId), { status: 'completed' });
+            }
+            
+            bootstrap.Modal.getInstance(document.getElementById('addPaymentModal')).hide();
+            loadSection('payments');
+        }
+
+        function changePassword() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                alert('New passwords do not match');
+                return;
+            }
+            
+            if (newPassword.length < 8) {
+                alert('New password must be at least 8 characters long');
+                return;
+            }
+            
+            if (currentPassword !== window.currentUser.password) {
+                alert('Current password is incorrect');
+                return;
+            }
+            
+            const users = IronTradingDB.get('users');
+            const userIndex = users.findIndex(u => u.id === window.currentUser.id);
+            
+            if (userIndex !== -1) {
+                users[userIndex].password = newPassword;
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                window.currentUser.password = newPassword;
+                
+                alert('Password changed successfully!');
+                bootstrap.Modal.getInstance(document.getElementById('changePasswordModal')).hide();
+                
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+            }
+        }
+
+        function editItem(type, id) {
+            showAddItemModal(type, id);
+        }
+
+        function viewItem(type, id) {
+            const item = IronTradingDB.get(type, id);
+            if (!item) {
+                alert("Item not found.");
+                return;
+            }
+
+            const modalTitle = document.getElementById('viewItemModalTitle');
+            const modalBody = document.getElementById('viewItemModalBody');
+
+            modalTitle.textContent = `${type.slice(0, -1).charAt(0).toUpperCase() + type.slice(1, -1)} Details`;
+            modalBody.innerHTML = '';
+
+            let detailsHtml = '<ul class="list-group list-group-flush">';
+            for (const key in item) {
+                let value = item[key];
+                if (key.includes('date')) {
+                    value = new Date(value).toLocaleDateString();
+                } else if (typeof value === 'object' && value !== null) {
+                    value = '<i>Object data</i>';
+                }
+                detailsHtml += `<li class="list-group-item"><strong>${key.replace(/_/g, ' ').charAt(0).toUpperCase() + key.replace(/_/g, ' ').slice(1)}:</strong> ${value}</li>`;
+            }
+            detailsHtml += '</ul>';
+
+            modalBody.innerHTML = detailsHtml;
+
+            const viewModal = new bootstrap.Modal(document.getElementById('viewItemModal'));
+            viewModal.show();
+        }
+
+        function deleteItem(type, id) {
+            if (confirm(`Are you sure you want to delete this ${type.slice(0,-1)}?`)) {
+                IronTradingDB.delete(type, id);
+                alert(`${type.slice(0, -1).charAt(0).toUpperCase() + type.slice(1, -1)} deleted successfully!`);
+                loadSection(type);
+            }
+        }
+    </script>
+                                                                                                                      const paymentProgress = order ? (totalPaid / order.total_amount) * 100 : 0;
+                
+                                                            
+            
+                                            
+                            
                         
-                        // Update current user
-                        window.currentUser.password = newPassword;
-                        
-                        alert('Password changed successfully!');
-                        bootstrap.Modal.getInstance(document.getElementById('changePasswordModal')).hide();
-                        
-                        // Clear form
-                        document.getElementById('currentPassword').value = '';
-                        document.getElementById('newPassword').value = '';
-                        document.getElementById('confirmPassword').value = '';
-                    }
-                }
 
-                function editItem(type, id) {
-                    showAddItemModal(type, id);
-                }
-
-                function viewItem(type, id) {
-                    const item = IronTradingDB.get(type, id);
-                    if (!item) {
-                        alert("Item not found.");
-                        return;
-                    }
-
-                    const modalTitle = document.getElementById('viewItemModalTitle');
-                    const modalBody = document.getElementById('viewItemModalBody');
-
-                    modalTitle.textContent = `${type.slice(0, -1).charAt(0).toUpperCase() + type.slice(1, -1)} Details`;
-                    modalBody.innerHTML = ''; // Clear previous content
-
-                    let detailsHtml = '<ul class="list-group list-group-flush">';
-                    for (const key in item) {
-                        let value = item[key];
-                        if (key.includes('date')) {
-                            value = new Date(value).toLocaleDateString();
-                        } else if (typeof value === 'object' && value !== null) {
-                            value = '<i>Object data</i>';
-                        }
-                        detailsHtml += `<li class="list-group-item"><strong>${key.replace(/_/g, ' ').charAt(0).toUpperCase() + key.replace(/_/g, ' ').slice(1)}:</strong> ${value}</li>`;
-                    }
-                    detailsHtml += '</ul>';
-
-                    modalBody.innerHTML = detailsHtml;
-
-                    const viewModal = new bootstrap.Modal(document.getElementById('viewItemModal'));
-                    viewModal.show();
-                }
-
-                function deleteItem(type, id) {
-                    if (confirm(`Are you sure you want to delete this ${type.slice(0,-1)}?`)) {
-                        IronTradingDB.delete(type, id);
-                        alert(`${type.slice(0, -1).charAt(0).toUpperCase() + type.slice(1, -1)} deleted successfully!`);
-                        loadSection(type);
-                    }
-                }
-            </script>
         </body>
         </html>
 
