@@ -589,10 +589,10 @@
                         </div>
                         
                         <div class="alert alert-info">
-                            <strong>Total Amount: ₹<span id="orderTotalPreview">0.00</span></strong>
+                            <div>Subtotal: ₹<span id="orderSubtotalPreview">0.00</span></div>
                             <div>GST Amount: ₹<span id="orderGstPreview">0.00</span></div>
                             <div>TCS Amount: ₹<span id="orderTcsPreview">0.00</span></div>
-                            <div>Final Amount: ₹<span id="orderFinalPreview">0.00</span></div>
+                            <strong>Final Amount: ₹<span id="orderFinalPreview">0.00</span></strong>
                         </div>
                     </form>
                 </div>
@@ -775,10 +775,10 @@
                             { id: 4, name: 'Galvanized Sheets', description: 'Corrosion-resistant sheets', grade: 'G90', quantity: 150, unit: 'tons', cost_per_unit: 1200, supplier_id: 2, purchase_date: '2023-07-20', hsn_code: '7210' }
                         ],
                         orders: [
-                            { id: 1, order_number: 'ORD001', buyer_id: 3, material_id: 1, quantity: 50, unit_price: 950, total_amount: 47500, status: 'completed', order_date: '2023-08-01', expected_delivery: '2023-08-10', notes: 'Urgent delivery required', gst_percentage: 18, tcs_percentage: 1 },
-                            { id: 2, order_number: 'ORD002', buyer_id: 4, material_id: 2, quantity: 20, unit_price: 2800, total_amount: 56000, status: 'in_production', order_date: '2023-08-05', expected_delivery: '2023-08-20', notes: 'Special packaging requested', gst_percentage: 18, tcs_percentage: 1 },
-                            { id: 3, order_number: 'ORD003', buyer_id: 3, material_id: 3, quantity: 30, unit_price: 800, total_amount: 24000, status: 'pending', order_date: '2023-08-10', expected_delivery: '2023-08-25', notes: '', gst_percentage: 18, tcs_percentage: 1 },
-                            { id: 4, order_number: 'ORD004', buyer_id: 4, material_id: 4, quantity: 25, unit_price: 1350, total_amount: 33750, status: 'shipped', order_date: '2023-08-12', expected_delivery: '2023-08-22', notes: 'Fragile handling required', gst_percentage: 18, tcs_percentage: 1 }
+                            { id: 1, order_number: 'ORD001', buyer_id: 3, material_id: 1, quantity: 50, unit_price: 950, total_amount: 56525, status: 'completed', order_date: '2023-08-01', expected_delivery: '2023-08-10', notes: 'Urgent delivery required', gst_percentage: 18, tcs_percentage: 1, subtotal: 47500 },
+                            { id: 2, order_number: 'ORD002', buyer_id: 4, material_id: 2, quantity: 20, unit_price: 2800, total_amount: 66080, status: 'in_production', order_date: '2023-08-05', expected_delivery: '2023-08-20', notes: 'Special packaging requested', gst_percentage: 18, tcs_percentage: 1, subtotal: 56000 },
+                            { id: 3, order_number: 'ORD003', buyer_id: 3, material_id: 3, quantity: 30, unit_price: 800, total_amount: 28560, status: 'pending', order_date: '2023-08-10', expected_delivery: '2023-08-25', notes: '', gst_percentage: 18, tcs_percentage: 1, subtotal: 24000 },
+                            { id: 4, order_number: 'ORD004', buyer_id: 4, material_id: 4, quantity: 25, unit_price: 1350, total_amount: 39937.5, status: 'shipped', order_date: '2023-08-12', expected_delivery: '2023-08-22', notes: 'Fragile handling required', gst_percentage: 18, tcs_percentage: 1, subtotal: 33750 }
                         ],
                         transports: [
                              { id: 1, order_id: 1, transporter_name: 'FastFreight Inc', vehicle_number: 'TRK1234', driver_name: 'David Wilson', driver_contact: '555-0301', dispatch_date: '2023-08-08', expected_arrival: '2023-08-10', actual_arrival: '2023-08-10', shipping_cost: 1500, status: 'delivered', notes: 'On-time delivery' },
@@ -786,9 +786,9 @@
                             { id: 3, order_id: 4, transporter_name: 'Reliable Transport', vehicle_number: 'TRK9012', driver_name: 'James Anderson', driver_contact: '555-0303', dispatch_date: '2023-08-15', expected_arrival: '2023-08-22', actual_arrival: null, shipping_cost: 1650, status: 'in_transit', notes: 'Track shipment for updates' }
                         ],
                         payments: [
-                            { id: 1, order_id: 1, amount: 47500, payment_date: '2023-08-12', payment_method: 'bank_transfer', reference_number: 'BT20230812123456', status: 'completed', notes: 'Payment received in full' },
-                            { id: 2, order_id: 2, amount: 28000, payment_date: '2023-08-06', payment_method: 'check', reference_number: 'CHK87654321', status: 'pending', notes: 'Check deposited, awaiting clearance' },
-                            { id: 3, order_id: 4, amount: 16875, payment_date: '2023-08-13', payment_method: 'bank_transfer', reference_number: 'BT20230813456789', status: 'completed', notes: '50% advance payment received' }
+                            { id: 1, order_id: 1, amount: 56525, payment_date: '2023-08-12', payment_method: 'bank_transfer', reference_number: 'BT20230812123456', status: 'completed', notes: 'Payment received in full' },
+                            { id: 2, order_id: 2, amount: 33040, payment_date: '2023-08-06', payment_method: 'check', reference_number: 'CHK87654321', status: 'completed', notes: '50% advance payment received' },
+                            { id: 3, order_id: 4, amount: 19968.75, payment_date: '2023-08-13', payment_method: 'bank_transfer', reference_number: 'BT20230813456789', status: 'completed', notes: '50% advance payment received' }
                         ],
                         invoices: [
                             { id: 1, invoice_number: 'INV20230815001', order_id: 1, issue_date: '2023-08-15', due_date: '2023-09-14', subtotal: 47500, gst_percentage: 18, gst_amount: 8550, tcs_percentage: 1, tcs_amount: 475, total_amount: 56525, status: 'paid' }
@@ -1514,22 +1514,19 @@
             const payments = IronTradingDB.get('payments');
             const orders = IronTradingDB.get('orders');
             const partners = IronTradingDB.get('partners');
-            const paymentsWithDetails = payments.map(payment => {
-                const order = orders.find(o => o.id === payment.order_id);
-                const buyer = order ? partners.find(p => p.id === order.buyer_id) : null;
-                
-                const totalPaid = payments.filter(p => p.order_id === payment.order_id && p.status === 'completed')
-                                         .reduce((sum, p) => sum + p.amount, 0);
-                const paymentProgress = order ? (totalPaid / order.total_amount) * 100 : 0;
+            
+            const ordersWithPaymentInfo = orders.map(order => {
+                const buyer = partners.find(p => p.id === order.buyer_id);
+                const orderPayments = payments.filter(p => p.order_id === order.id);
+                const totalPaid = orderPayments.reduce((sum, p) => sum + p.amount, 0);
+                const remainingBalance = order.total_amount - totalPaid;
                 
                 return {
-                    ...payment,
-                    order_number: order ? order.order_number : 'Unknown',
+                    ...order,
                     buyer_name: buyer ? buyer.name : 'Unknown',
-                    order_amount: order ? order.total_amount : 0,
                     total_paid: totalPaid,
-                    payment_progress: paymentProgress,
-                    remaining_balance: order ? order.total_amount - totalPaid : 0
+                    remaining_balance: remainingBalance,
+                    payments: orderPayments
                 };
             });
             
@@ -1549,48 +1546,27 @@
                                     <tr>
                                         <th>Order #</th>
                                         <th>Buyer</th>
-                                        <th>Amount</th>
                                         <th>Order Total</th>
-                                        <th>Paid</th>
-                                        <th>Balance</th>
-                                        <th>Payment Date</th>
-                                        <th>Method</th>
-                                        <th>Status</th>
+                                        <th>Paid Amount</th>
+                                        <th>Remaining Balance</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    ${paymentsWithDetails.map(payment => `
+                                    ${ordersWithPaymentInfo.map(order => `
                                         <tr>
-                                            <td>${payment.order_number}</td>
-                                            <td>${payment.buyer_name}</td>
-                                            <td>₹${payment.amount.toLocaleString()}</td>
-                                            <td>₹${payment.order_amount.toLocaleString()}</td>
-                                            <td>₹${payment.total_paid.toLocaleString()}</td>
-                                            <td>₹${payment.remaining_balance.toLocaleString()}</td>
-                                            <td>${new Date(payment.payment_date).toLocaleDateString()}</td>
-                                            <td>${payment.payment_method}</td>
-                                            <td>
-                                                <span class="badge bg-${ 
-                                                    payment.status === 'completed' ? 'success' : 
-                                                    payment.status === 'pending' ? 'warning' : 'danger'
-                                                }">
-                                                    ${payment.status}
-                                                </span>
-                                                <div class="progress-bar-container">
-                                                    <div class="progress-bar" style="width: ${payment.payment_progress}%"></div>
-                                                </div>
-                                            </td>
+                                            <td>${order.order_number}</td>
+                                            <td>${order.buyer_name}</td>
+                                            <td>₹${order.total_amount.toLocaleString()}</td>
+                                            <td>₹${order.total_paid.toLocaleString()}</td>
+                                            <td>₹${order.remaining_balance.toLocaleString()}</td>
                                             <td>
                                                 <div class="action-buttons">
-                                                <button class="btn btn-sm btn-info" onclick="viewItem('payments', ${payment.id})">
-                                                        <i class="fas fa-eye"></i>
+                                                    <button class="btn btn-sm btn-info" onclick="viewPaymentDetails(${order.id})">
+                                                        <i class="fas fa-eye"></i> View Payments
                                                     </button>
-                                                    <button class="btn btn-sm btn-warning" onclick="showAddPaymentModal(${payment.id})">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-danger" onclick="deleteItem('payments', ${payment.id})">
-                                                        <i class="fas fa-trash"></i>
+                                                    <button class="btn btn-sm btn-success" onclick="showAddPaymentModal()">
+                                                        <i class="fas fa-plus"></i> Add Payment
                                                     </button>
                                                 </div>
                                             </td>
@@ -1604,6 +1580,57 @@
             `;
             
             document.getElementById('contentArea').innerHTML = content;
+        }
+
+        function viewPaymentDetails(orderId) {
+            const order = IronTradingDB.get('orders', orderId);
+            const payments = IronTradingDB.get('payments').filter(p => p.order_id === orderId);
+            const modalBody = document.getElementById('viewItemModalBody');
+            
+            document.getElementById('viewItemModalTitle').textContent = `Payment Details for Order ${order.order_number}`;
+            
+            let html = `
+                <p><strong>Order Total:</strong> ₹${order.total_amount.toLocaleString()}</p>
+                <hr>
+                <h5>Payment Installments:</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                                <th>Reference No.</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${payments.map(p => `
+                                <tr>
+                                    <td>${new Date(p.payment_date).toLocaleDateString()}</td>
+                                    <td>₹${p.amount.toLocaleString()}</td>
+                                    <td>${p.payment_method}</td>
+                                    <td>${p.reference_number || 'N/A'}</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-warning" onclick="showAddPaymentModal(${p.id})">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" onclick="deleteItem('payments', ${p.id})">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            modalBody.innerHTML = html;
+            const viewModal = new bootstrap.Modal(document.getElementById('viewItemModal'));
+            viewModal.show();
         }
 
         function loadEmployees() {
@@ -1906,10 +1933,10 @@
                     <td>${material.name} (${material.grade})<br><small>HSN: ${material.hsn_code}</small></td>
                     <td>${order.quantity} ${material.unit}</td>
                     <td>₹${order.unit_price.toLocaleString()}</td>
-                    <td>₹${order.total_amount.toLocaleString()}</td>
+                    <td>₹${order.subtotal.toLocaleString()}</td>
                 </tr>
             `;
-            document.getElementById('invoiceSubtotal').textContent = order.total_amount.toFixed(2);
+            document.getElementById('invoiceSubtotal').textContent = order.subtotal.toFixed(2);
             
             document.getElementById('gstPercentage').value = order.gst_percentage || 18;
             document.getElementById('tcsPercentage').value = order.tcs_percentage || 1;
@@ -1961,6 +1988,7 @@
             document.getElementById('saveOrder').textContent = 'Save Order';
             document.getElementById('orderForm').reset();
             document.getElementById('orderDate').valueAsDate = new Date();
+            calculateOrderTotal();
             
             const buyerSelect = document.getElementById('orderBuyer');
             buyerSelect.innerHTML = '<option value="">Select Buyer</option>';
@@ -2022,7 +2050,7 @@
             const tcsAmount = subtotal * (tcsPercentage / 100);
             const finalAmount = subtotal + gstAmount + tcsAmount;
             
-            document.getElementById('orderTotalPreview').textContent = subtotal.toFixed(2);
+            document.getElementById('orderSubtotalPreview').textContent = subtotal.toFixed(2);
             document.getElementById('orderGstPreview').textContent = gstAmount.toFixed(2);
             document.getElementById('orderTcsPreview').textContent = tcsAmount.toFixed(2);
             document.getElementById('orderFinalPreview').textContent = finalAmount.toFixed(2);
@@ -2037,20 +2065,24 @@
             const notes = document.getElementById('orderNotes').value;
             const gstPercentage = parseFloat(document.getElementById('orderGst').value);
             const tcsPercentage = parseFloat(document.getElementById('orderTcs').value);
-            
+
             if (!buyerId || !materialId || !quantity || !unitPrice || !orderDate) {
                 alert('Please fill in all required fields');
                 return;
             }
-            
-            const totalAmount = quantity * unitPrice;
-            
+
+            const subtotal = quantity * unitPrice;
+            const gstAmount = subtotal * (gstPercentage / 100);
+            const tcsAmount = subtotal * (tcsPercentage / 100);
+            const finalAmount = subtotal + gstAmount + tcsAmount;
+
             const newOrderData = {
                 buyer_id: parseInt(buyerId),
                 material_id: parseInt(materialId),
                 quantity: quantity,
                 unit_price: unitPrice,
-                total_amount: totalAmount,
+                subtotal: subtotal,
+                total_amount: finalAmount,
                 order_date: orderDate,
                 notes: notes,
                 gst_percentage: gstPercentage,
@@ -2542,9 +2574,6 @@
 
             document.getElementById('paymentForm').reset();
             document.getElementById('paymentDate').valueAsDate = new Date();
-            document.getElementById('paymentOrderTotal').textContent = '0.00';
-            document.getElementById('paymentPreviouslyPaid').textContent = '0.00';
-            document.getElementById('paymentRemainingBalance').textContent = '0.00';
             
             const orderSelect = document.getElementById('paymentOrder');
             orderSelect.innerHTML = '<option value="">Select Order</option>';
@@ -2552,7 +2581,10 @@
             orders.forEach(order => {
                 orderSelect.innerHTML += `<option value="${order.id}">${order.order_number}</option>`;
             });
-            
+
+            document.getElementById('paymentOrder').addEventListener('change', updatePaymentInfo);
+            document.getElementById('paymentAmount').addEventListener('input', updatePaymentInfo);
+
             if (paymentId) {
                 const payment = IronTradingDB.get('payments', paymentId);
                 if (payment) {
@@ -2564,6 +2596,8 @@
                     document.getElementById('paymentReference').value = payment.reference_number;
                     document.getElementById('paymentNotes').value = payment.notes;
                 }
+            } else {
+                updatePaymentInfo();
             }
 
             const addPaymentModal = new bootstrap.Modal(document.getElementById('addPaymentModal'));
@@ -2582,7 +2616,7 @@
             const order = IronTradingDB.get('orders', parseInt(orderId));
             const payments = IronTradingDB.get('payments');
             
-            const totalPaid = payments.filter(p => p.order_id === parseInt(orderId) && p.status === 'completed' && p.id !== window.currentItemId)
+            const totalPaid = payments.filter(p => p.order_id === parseInt(orderId) && p.id !== window.currentItemId)
                                      .reduce((sum, p) => sum + p.amount, 0);
             
             const remainingBalance = order.total_amount - totalPaid;
@@ -2604,14 +2638,13 @@
                 alert('Please fill in all required fields');
                 return;
             }
-            
+
             const order = IronTradingDB.get('orders', parseInt(orderId));
             const payments = IronTradingDB.get('payments');
-            
-            const totalPaidForOrder = payments.filter(p => p.order_id === parseInt(orderId) && p.status === 'completed' && p.id !== window.currentItemId)
+            const totalPaid = payments.filter(p => p.order_id === parseInt(orderId) && p.id !== window.currentItemId)
                                      .reduce((sum, p) => sum + p.amount, 0);
             
-            const remainingBalance = order.total_amount - totalPaidForOrder;
+            const remainingBalance = order.total_amount - totalPaid;
 
             if (amount > remainingBalance) {
                 alert(`Payment amount cannot exceed remaining balance of ₹${remainingBalance.toFixed(2)}`);
@@ -2637,7 +2670,11 @@
             }
             
             if (newPaymentData.status === 'completed') {
-                IronTradingDB.update('orders', parseInt(orderId), { status: 'completed' });
+                const updatedPayments = IronTradingDB.get('payments').filter(p => p.order_id === parseInt(orderId));
+                const updatedTotalPaid = updatedPayments.reduce((sum, p) => sum + p.amount, 0);
+                if (updatedTotalPaid >= order.total_amount) {
+                    IronTradingDB.update('orders', parseInt(orderId), { status: 'completed' });
+                }
             }
             
             bootstrap.Modal.getInstance(document.getElementById('addPaymentModal')).hide();
@@ -2737,4 +2774,3 @@
     </script>
 </body>
 </html>
-
