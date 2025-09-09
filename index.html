@@ -780,7 +780,7 @@
                             { id: 3, order_number: 'ORD003', buyer_id: 3, material_id: 3, quantity: 30, unit_price: 800, total_amount: 24000, status: 'pending', order_date: '2023-08-10', expected_delivery: '2023-08-25', notes: '', gst_percentage: 18, tcs_percentage: 1 },
                             { id: 4, order_number: 'ORD004', buyer_id: 4, material_id: 4, quantity: 25, unit_price: 1350, total_amount: 33750, status: 'shipped', order_date: '2023-08-12', expected_delivery: '2023-08-22', notes: 'Fragile handling required', gst_percentage: 18, tcs_percentage: 1 }
                         ],
-                        transport: [
+                        transports: [
                              { id: 1, order_id: 1, transporter_name: 'FastFreight Inc', vehicle_number: 'TRK1234', driver_name: 'David Wilson', driver_contact: '555-0301', dispatch_date: '2023-08-08', expected_arrival: '2023-08-10', actual_arrival: '2023-08-10', shipping_cost: 1500, status: 'delivered', notes: 'On-time delivery' },
                             { id: 2, order_id: 2, transporter_name: 'QuickShip Logistics', vehicle_number: 'TRK5678', driver_name: 'Emily Clark', driver_contact: '555-0302', dispatch_date: '2023-08-18', expected_arrival: '2023-08-20', actual_arrival: null, shipping_cost: 1800, status: 'scheduled', notes: 'Requires temperature control' },
                             { id: 3, order_id: 4, transporter_name: 'Reliable Transport', vehicle_number: 'TRK9012', driver_name: 'James Anderson', driver_contact: '555-0303', dispatch_date: '2023-08-15', expected_arrival: '2023-08-22', actual_arrival: null, shipping_cost: 1650, status: 'in_transit', notes: 'Track shipment for updates' }
@@ -1429,7 +1429,7 @@
         }
 
         function loadTransport() {
-            const transport = IronTradingDB.get('transport');
+            const transport = IronTradingDB.get('transports');
             const orders = IronTradingDB.get('orders');
             const partners = IronTradingDB.get('partners');
             const transportWithDetails = transport.map(t => {
@@ -2098,7 +2098,9 @@
             
             let item = null;
             if (id) {
-                item = IronTradingDB.get(type + 's', id);
+                // Handle 'transport' singular vs 'transports' plural inconsistency
+                const tableName = type === 'transport' ? 'transports' : type + 's';
+                item = IronTradingDB.get(tableName, id);
             }
             
             switch(type) {
@@ -2405,6 +2407,7 @@
         function saveItem() {
             const type = window.currentItemType;
             let newItem = {};
+            const tableName = type === 'transport' ? 'transports' : type + 's';
             
             switch(type) {
                 case 'material':
@@ -2521,10 +2524,10 @@
             }
             
             if (window.currentItemId) {
-                IronTradingDB.update(type + 's', window.currentItemId, newItem);
+                IronTradingDB.update(tableName, window.currentItemId, newItem);
                 alert(`${type.charAt(0).toUpperCase() + type.slice(1)} updated successfully!`);
             } else {
-                IronTradingDB.create(type + 's', newItem);
+                IronTradingDB.create(tableName, newItem);
                 alert(`${type.charAt(0).toUpperCase() + type.slice(1)} added successfully!`);
             }
             
@@ -2689,7 +2692,8 @@
         }
 
         function viewItem(type, id) {
-            const item = IronTradingDB.get(type, id);
+            const tableName = type === 'transport' ? 'transports' : type.endsWith('s') ? type : type + 's';
+            const item = IronTradingDB.get(tableName, id);
             if (!item) {
                 alert("Item not found.");
                 return;
@@ -2698,7 +2702,8 @@
             const modalTitle = document.getElementById('viewItemModalTitle');
             const modalBody = document.getElementById('viewItemModalBody');
 
-            modalTitle.textContent = `${type.slice(0, -1).charAt(0).toUpperCase() + type.slice(1, -1)} Details`;
+            const singularType = type.endsWith('s') ? type.slice(0, -1) : type;
+            modalTitle.textContent = `${singularType.charAt(0).toUpperCase() + singularType.slice(1)} Details`;
             modalBody.innerHTML = '';
 
             let detailsHtml = '<ul class="list-group list-group-flush">';
@@ -2720,12 +2725,16 @@
         }
 
         function deleteItem(type, id) {
-            if (confirm(`Are you sure you want to delete this ${type.slice(0,-1)}?`)) {
-                IronTradingDB.delete(type, id);
-                alert(`${type.slice(0, -1).charAt(0).toUpperCase() + type.slice(1, -1)} deleted successfully!`);
+            const singularType = type.endsWith('s') ? type.slice(0, -1) : type;
+            const tableName = type === 'transport' ? 'transports' : type.endsWith('s') ? type : type + 's';
+            
+            if (confirm(`Are you sure you want to delete this ${singularType}?`)) {
+                IronTradingDB.delete(tableName, id);
+                alert(`${singularType.charAt(0).toUpperCase() + singularType.slice(1)} deleted successfully!`);
                 loadSection(type);
             }
         }
     </script>
 </body>
 </html>
+
